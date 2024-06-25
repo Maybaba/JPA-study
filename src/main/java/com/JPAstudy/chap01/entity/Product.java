@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
-@ToString
+@ToString(exclude = "nickName") //중괄호 안에 여러 개 쓸 수 있다.
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -23,11 +23,15 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY) //mysql(IDENTITY) 인지 oracle(SEQUENCE)인지에 따라 타입을 바꾼다.
     @Column(name="prod_id")
     private Long id;
+
+    @Setter
     @Column(name="prod_nm", length = 30, nullable = false)
     private String name;
+
     @Column(name="price")
     private int price;
 
+    @Setter
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Category category;
@@ -46,4 +50,25 @@ public class Product {
         FOOD, FASHION, ELECTRONIC
     }
 
+    @PrePersist //컬럼 기본값 설정
+    public void prePersist() {
+        if(this.price == 0) {
+            this.price = 10000;
+        }
+        if(this.category == null) {
+            this.category = Category.FOOD;
+        }
+    }
+
+//    @Override
+//    public String toString() {
+//        return "Product{" +
+//                "id=" + id +
+//                ", name='" + name + '\'' +
+//                ", price=" + price +
+//                ", category=" + category +
+//                ", createAt=" + createAt +
+//                ", updateAt=" + updateAt +
+//                '}';
+//    }
 }
