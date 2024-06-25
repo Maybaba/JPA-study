@@ -17,8 +17,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "tbl_product")
 public class Product {
-    //엔터티를 설계하면 알아서 테이블을 짜준다.
 
+    //엔터티를 설계하면 알아서 테이블을 짜준다.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) //mysql(IDENTITY) 인지 oracle(SEQUENCE)인지에 따라 타입을 바꾼다.
     @Column(name="prod_id")
@@ -59,16 +59,4 @@ public class Product {
             this.category = Category.FOOD;
         }
     }
-
-//    @Override
-//    public String toString() {
-//        return "Product{" +
-//                "id=" + id +
-//                ", name='" + name + '\'' +
-//                ", price=" + price +
-//                ", category=" + category +
-//                ", createAt=" + createAt +
-//                ", updateAt=" + updateAt +
-//                '}';
-//    }
 }
