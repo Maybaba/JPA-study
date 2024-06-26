@@ -1,7 +1,7 @@
 package com.JPAstudy.chap02.repository;
 
 
-import com.JPAstudy.chap03_page.Student;
+import com.JPAstudy.chap02.entity.Student;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -63,5 +63,7 @@ public interface StudentRepository extends JpaRepository<Student, String> {
 
 //    @Query("") //limit 랑 orderby 빼고 값을 넣어주면 된다. 나머지는 알아서 처리해줌
 //    Page<Student> getList();
+
+
 
 }
