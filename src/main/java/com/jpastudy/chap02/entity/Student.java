@@ -1,4 +1,4 @@
-package com.JPAstudy.chap02.entity;
+package com.jpastudy.chap02.entity;
 
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;

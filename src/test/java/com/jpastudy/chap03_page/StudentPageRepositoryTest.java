@@ -1,6 +1,6 @@
-package com.JPAstudy.chap03_page;
+package com.jpastudy.chap03_page;
 
-import com.JPAstudy.chap02.entity.Student;
+import com.jpastudy.chap02.entity.Student;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,7 +1,7 @@
-package com.JPAstudy.chap02.repository;
+package com.jpastudy.chap02.repository;
 
 
-import com.JPAstudy.chap02.entity.Student;
+import com.jpastudy.chap02.entity.Student;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

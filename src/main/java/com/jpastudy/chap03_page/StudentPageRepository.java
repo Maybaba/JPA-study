@@ -1,6 +1,6 @@
-package com.JPAstudy.chap03_page;
+package com.jpastudy.chap03_page;
 
-import com.JPAstudy.chap02.entity.Student;
+import com.jpastudy.chap02.entity.Student;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

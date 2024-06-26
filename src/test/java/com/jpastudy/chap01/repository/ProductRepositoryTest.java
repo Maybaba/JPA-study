@@ -1,19 +1,15 @@
-package com.JPAstudy.chap01.repository;
+package com.jpastudy.chap01.repository;
 
-import com.JPAstudy.chap01.entity.Product;
+import com.jpastudy.chap01.entity.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
-import static com.JPAstudy.chap01.entity.Product.Category.*;
+import static com.jpastudy.chap01.entity.Product.Category.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
