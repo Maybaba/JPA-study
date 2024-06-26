@@ -36,8 +36,6 @@ class EmployeeRepositoryTest {
         System.out.println("department = " + department);
         List<Employee> employees = employeeRepository.findAll();
         employees.forEach(System.out::println);
-
-
     }
 
     //양방향 연관관계에서 리스트에 데이터 갱신 시 주의사항
@@ -84,18 +82,32 @@ class EmployeeRepositoryTest {
             //1번 부서 사원 목록 조회
             List<Employee> employeeList = department.getEmployees();
             //2번 부서 사원 목록 가져오기
-            Employee employee = employeeRepository.findById(1L).orElseThrow();
-
-            Employee employee = new EmployeeList.get
+            Employee employee = employeeList.get(1);
 
             // 사원 목록 삭제하기 : casecade로 연관되어서 삭제되어야 할 것
-            employeeList.remove(employee);
-            employee.setDepartment(null);
-
+//            employeeList.remove(employee);
+//            employee.setDepartment(null);
+              department.removeEmployee(employee);
             //갱신 반영
 //            departmentRepository.save(department);
             //then
         }
 
+        @Test
+        @DisplayName("양방향 관계에서 리스트에 데이터를 추가하면 DB에도 INSERT된다")
+        void cascadePersistT() {
+            //given
 
+            //2번 부서 조회
+            Department department = departmentRepository.findById(2L).orElseThrow();
+
+            //새로운 사원 생성
+            Employee employee = Employee.builder()
+                    .name("뽀로로")
+                    .build();
+
+            //when
+            department.addEmployee(employee);
+            //then
+    }
 }
