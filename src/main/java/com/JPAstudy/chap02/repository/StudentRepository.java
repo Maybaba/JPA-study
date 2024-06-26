@@ -1,12 +1,16 @@
 package com.JPAstudy.chap02.repository;
 
 
-import com.JPAstudy.chap02.entity.Student;
+import com.JPAstudy.chap03_page.Student;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface StudentRepository extends JpaRepository<Student, String> {
 
@@ -29,6 +33,35 @@ public interface StudentRepository extends JpaRepository<Student, String> {
     @Query(value = "SELECT * FROM tbl_student WHERE stu_name = ?1 OR city = ?2", nativeQuery = true)
     List<Student> getStudentByNameOrCity2(String name,  String city);
 
+    /*
+    JPQL
 
+    SELECT 엔터티 별칭
+    FROM 엔터티 클래스명 as 엔터티별칭
+    WHERE 별칭, 필드명
+
+    ex) native - SELECT * FROM tbl_student WHERE stu_name = ?
+    ex) native - SELECT st FROM Student WHERE st.name = ?
+
+     */
+
+    //도시명으로 학생 1명을 단일 조회
+    @Query(value = "SELECT st FROM Student st where st.name = ?1") //native query의 경우  새략
+    Optional<Student> getByCityWithJPQL(String city);
+
+    //특정 이름이 포함된 학생 리스트 조회하기
+    @Query("SELECT stu FROM Student stu WHERE stu.name LIKE %?1%")
+    List<Student> searchByNameWithJPQL(String name);
+
+    //JPQL로 갱신 처리하기 (update)
+    @Modifying
+    @Query("DELETE FROM Student s WHERE s.name = ?1 AND s.city = ?2")
+    void deleteByNameAndCityWithJPQL(String name, String city);
+
+    //검색 + 페이징
+    Page<Student> findByNameContaining(String name, Pageable pageable);
+
+//    @Query("") //limit 랑 orderby 빼고 값을 넣어주면 된다. 나머지는 알아서 처리해줌
+//    Page<Student> getList();
 
 }

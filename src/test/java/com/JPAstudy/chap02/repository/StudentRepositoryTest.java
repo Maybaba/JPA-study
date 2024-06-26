@@ -1,6 +1,6 @@
 package com.JPAstudy.chap02.repository;
 
-import com.JPAstudy.chap02.entity.Student;
+import com.JPAstudy.chap03_page.Student;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,12 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static ch.qos.logback.core.joran.spi.ConsoleTarget.findByName;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Transactional
-@Rollback
+@Transactional // 꼭 꼭 jpa 쓸 때는 test, service에 사용하기 !
+@Rollback(false) //롤백이 기본적으로 되어있다. 로그 보고 싶으면 false
 class StudentRepositoryTest {
 
         @Autowired
@@ -107,7 +106,48 @@ class StudentRepositoryTest {
         System.out.println("\n\n\n\n");
     }
 
+    @Test
+    @DisplayName("JPQL로 학생 조회하기")
+    void jpqlTest() {
+        //given
+        String city = "제주도";
+        //when
+        Student student = studentRepository.getByCityWithJPQL(city)
+                // 학생이 조회가 안되면 예외를 발생시켜라
+                .orElseThrow(() -> new RuntimeException("학생이 없음!"));
+        //then
+        assertNotNull(student);
 
+        System.out.println("\n\n\nstudent = " + student + "\n\n\n");
+//        assertThrows(RuntimeException.class, () -> new RuntimeException());
+    }
+
+
+    @Test
+    @DisplayName("JPQL로 특정 이름이 포함환 학생 조회하기")
+    void specifyT () {
+        //given
+        String containingName = "춘";
+        //when
+        List<Student> students = studentRepository.searchByNameWithJPQL(containingName);
+
+        //then
+        System.out.println("\n\n\n");
+        students.forEach(System.out::println);
+        System.out.println("\n\n\n");
+    }
+
+    @Test
+    @DisplayName("jqpl로 삭제하기")
+    void deleteT() {
+         //given
+        String name = "어피치";
+        String city = "제주도";
+        //when
+        studentRepository.deleteByNameAndCityWithJPQL(name, city);
+        //then
+        assertEquals(0, studentRepository.findByName(name).size());
+    }
 
 }
 

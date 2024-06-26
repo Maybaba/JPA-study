@@ -1,0 +1,67 @@
+package com.JPAstudy.chap03_page;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@SpringBootTest
+@Transactional
+@Rollback
+class StudentPageRepositoryTest {
+
+    @Autowired
+    StudentPageRepository repository;
+
+    @BeforeEach
+    void bulkInsert() {
+        for (int i = 1; i <= 147; i++) {
+            Student ss = Student.builder()
+                    .city("시골")
+                    .name("춘사미")
+                    .major("숨쉬기")
+                    .build();
+            repository.save(ss);
+        }
+    }
+
+    @Test
+    @DisplayName("기본적인 페이지 조회 테스트")
+    void basicPageTest() {
+        //given
+        int pageNo = 1;
+        int amount = 10;
+
+        // 페이징 정보 객체 생성 (Pageable)
+        // 여기서는 페이지 번호가 zero-based. 1페이지 = 0(month와 동일 취급)
+        Pageable pageInfo = PageRequest.of(1, 5);
+
+        //when
+        Page<Student> students = repository.findAll(pageInfo);
+        //실질적인 데이터 꺼내기
+        List<Student> studentList = students.getContent();
+        //총 페이지 수
+       int totalPages = students.getTotalPages();
+        // 총 학생 수
+        long count = students.getTotalElements();
+
+        //then
+        System.out.println("\n\n\n");
+        System.out.println("totalPages = " + totalPages);
+        System.out.println("count = " + count);
+        System.out.println();
+        studentList.forEach(System.out::println);
+        System.out.println("\n\n\n");
+    }
+
+}
