@@ -33,7 +33,7 @@ public class Department {
         - mappedBy에는 상대방 엔터티에 @ManyToOne에 대응되는 필드명을 꼭 적어야 함
      */
 
-    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY) //상대방 department 연관 컬럼 명시
+    @OneToMany(mappedBy = "department", orphanRemoval = true, casecade = CascadeType.REMOVE)
     private List<Employee> employees = new ArrayList<>();
 
 

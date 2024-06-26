@@ -73,9 +73,29 @@ class EmployeeRepositoryTest {
         System.out.println("\n\n\n");
         employees.forEach(System.out::println);
         System.out.println("\n\n\n");
-
-
     }
+
+        @Test
+        @DisplayName("고아 객체 삭제하기")
+        void orphanRemovalTest() {
+            //given
+            //1번 부서 조회
+            Department department = departmentRepository.findById(1L).orElseThrow();
+            //1번 부서 사원 목록 조회
+            List<Employee> employeeList = department.getEmployees();
+            //2번 부서 사원 목록 가져오기
+            Employee employee = employeeRepository.findById(1L).orElseThrow();
+
+            Employee employee = new EmployeeList.get
+
+            // 사원 목록 삭제하기 : casecade로 연관되어서 삭제되어야 할 것
+            employeeList.remove(employee);
+            employee.setDepartment(null);
+
+            //갱신 반영
+//            departmentRepository.save(department);
+            //then
+        }
 
 
 }
