@@ -40,4 +40,11 @@ public class Employee {
 //                ", department=" + department +
                 '}';
     }
+
+    //이 메서드로 양방향 관계에서 한 쪽 수정시 자동으로 반대쪽도 수정되게끔 유틸을 만들어서
+    //다른 쪽에서도 수정이 자동으로 일어나게 하도록 한다.
+    public void changeDepartment(Department department) {
+        this.department = department;
+        department.getEmployees().add(this);
+    }
 }
