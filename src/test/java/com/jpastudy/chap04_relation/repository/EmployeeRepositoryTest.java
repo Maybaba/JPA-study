@@ -12,8 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 @Transactional
 @Rollback(false)
@@ -110,4 +108,20 @@ class EmployeeRepositoryTest {
             department.addEmployee(employee);
             //then
     }
+
+
+    @Test
+    @DisplayName("부서가 사라지면 해당 사원도 같이 사라진다.")
+    void cascadRemoveTest() {
+        //given
+        Department department = departmentRepository.findById(2L).orElseThrow();
+
+        //when
+        departmentRepository.delete(department);
+
+        //then
+    }
+
+
+
 }
