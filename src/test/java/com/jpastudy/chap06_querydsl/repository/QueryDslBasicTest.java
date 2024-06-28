@@ -2,15 +2,13 @@ package com.jpastudy.chap06_querydsl.repository;
 
 import com.jpastudy.chap06_querydsl.entity.Group;
 import com.jpastudy.chap06_querydsl.entity.Idol;
-import com.jpastudy.chap06_querydsl.entity.QIdol;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -31,6 +29,10 @@ class QueryDslBasicTest {
 
     @Autowired
     GroupRepository groupRepository;
+
+    @Qualifier("idolRepository")
+    @Autowired
+    IdolCustomRepository idolCustomRepository;
 
     @Autowired
     EntityManager em;
@@ -57,7 +59,6 @@ class QueryDslBasicTest {
         idolRepository.save(idol2);
         idolRepository.save(idol3);
         idolRepository.save(idol4);
-
     }
 
     @Test
@@ -116,6 +117,7 @@ class QueryDslBasicTest {
                                 .and(idol.age.eq(age))
                 )
                 .fetchOne();
+        
 
         //then
         assertNotNull(foundIdol);
@@ -169,7 +171,6 @@ class QueryDslBasicTest {
         System.out.println("idol1 = " + idol1);
 
 
-
         //단일행 조회시, null safety를 위한 optional로 받고 싶을 때
         Optional<Idol> foundIdolOptional = Optional.ofNullable(jpaQueryFactory
                 .select(idol)
@@ -214,8 +215,98 @@ class QueryDslBasicTest {
 
         System.out.println("idolList3 = " + idolList3);
         //then
+
+
     }
+
+    @Test
+    @DisplayName("나이가 24세 이상인 아이돌 조회")
+    void testAgeGoe() {
+        // given
+        int ageThreshold = 24;
+
+        // when
+        List<Idol> result = jpaQueryFactory
+                .selectFrom(idol)
+                .where(idol.age.goe(ageThreshold))
+                .fetch();
+
+        // then
+        assertFalse(result.isEmpty());
+        for (Idol idol : result) {
+            System.out.println("\n\nIdol: " + idol);
+            assertTrue(idol.getAge() >= ageThreshold);
+        }
+    }
+
+    @Test
+    @DisplayName("이름에 '김'이 포함된 아이돌 조회")
+    void testNameContains() {
+        // given
+        String substring = "김";
+
+        // when
+        List<Idol> result = jpaQueryFactory
+                .selectFrom(idol)
+                .where(idol.idolName.contains(substring))
+                .fetch();
+
+        // then
+        assertFalse(result.isEmpty());
+        for (Idol idol : result) {
+            System.out.println("Idol: " + idol);
+            assertTrue(idol.getIdolName().contains(substring));
+        }
+    }
+
+    @Test
+    @DisplayName("나이가 20세에서 25세 사이인 아이돌 조회")
+    void testAgeBetween() {
+        // given
+        int ageStart = 20;
+        int ageEnd = 25;
+
+        // when
+        List<Idol> result = jpaQueryFactory
+                .selectFrom(idol)
+                .where(idol.age.between(ageStart, ageEnd))
+                .fetch();
+
+        // then
+        assertFalse(result.isEmpty());
+        for (Idol idol : result) {
+            System.out.println("Idol: " + idol);
+            assertTrue(idol.getAge() >= ageStart && idol.getAge() <= ageEnd);
+        }
+    }
+
+
+    @Test
+    @DisplayName("르세라핌 그룹에 속한 아이돌 조회")
+    void testGroupEquals() {
+        // given
+        String groupName = "르세라핌";
+
+        // when
+        List<Idol> result = jpaQueryFactory
+                .selectFrom(idol)
+                .where(idol.group.groupName.eq(groupName))
+                .fetch();
+
+        // then
+        assertFalse(result.isEmpty());
+        for (Idol idol : result) {
+            System.out.println("Idol: " + idol);
+            assertEquals(groupName, idol.getGroup().getGroupName()); //연관관계 설정 해놓아서 가능한 것이다
+        }
+    }
+
+    //        1. 아이돌을 이름 기준으로 오름차순으로 정렬하여 조회하세요.
+//            2. 아이돌을 나이 기준으로 내림차순 정렬하고, 페이지당 3명씩 페이징 처리하여 1번째 페이지의 아이돌을 조회하세요.
+//            3. "아이브" 그룹의 아이돌을 이름 기준으로 오름차순 정렬하고, 페이지당 2명씩 페이징 처리하여 첫 번째 페이지의 아이돌을 조회하세요.
+
 
 
 
 }
+
