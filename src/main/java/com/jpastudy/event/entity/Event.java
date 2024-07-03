@@ -22,7 +22,7 @@ public class Event {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id; //정수 타입이면 링크 투에서 ㅣㄹㅇ크가 안열려서 링크 연겷 문자열로 바꺼ㅜ야 하낟.
 
     @Column(name = "ev_title", nullable = false, length = 50)
     private String title; // 이벤트 제목
