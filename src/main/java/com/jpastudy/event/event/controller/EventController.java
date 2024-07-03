@@ -21,9 +21,16 @@ public class EventController {
 
     private final EventService eventService;
 
-    // 전체 조회 요청
+    // 전체 조회 요청 : 예외 처리
     @GetMapping
-    public ResponseEntity<?> getList(@RequestParam(required = false, defaultValue = "date")String sort) {
+    public ResponseEntity<?> getList(
+            @RequestParam(required = false)
+            String sort) {
+
+        if(sort == null) {
+            return ResponseEntity.badRequest().body("sort param이 없습니둥... ");
+        }
+
         List<EventDetailDto> events = eventService.getEvents(sort);
         return ResponseEntity.ok().body(events);
     }
