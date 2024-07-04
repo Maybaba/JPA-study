@@ -3,6 +3,7 @@ package com.jpastudy.event.service;
 import com.jpastudy.event.entity.Event;
 import com.jpastudy.event.event.dto.request.EventSaveDto;
 import com.jpastudy.event.event.dto.response.EventDetailDto;
+import com.jpastudy.event.event.dto.response.EventOneDto;
 import com.jpastudy.event.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,14 @@ public class EventService {
         Event savedEvent = eventRepository.save(dto.toEntity());
         log.info("saved event : {}", savedEvent);
         return getEvents("date"); // 날짜로 정렬하기
+    }
+
+    //이벤트 단일 조회
+    public EventOneDto getEventDetail(Long id) {
+        Event foundEvent  = eventRepository.findById(id).orElseThrow();
+        return new EventOneDto(foundEvent);
+
+
     }
 
 }
